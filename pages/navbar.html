@@ -1,1 +1,15 @@
-
+<div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 flex justify-around items-center px-2 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] z-40 transition-transform duration-300 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+    <button @click="navigateTo('landing')" class="flex flex-col items-center gap-1 p-2 rounded-xl transition w-20" :class="view === 'landing' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'">
+        <i data-lucide="home" class="w-6 h-6" :class="view === 'landing' ? 'fill-current' : ''"></i>
+        <span class="text-[10px] font-bold">خانه</span>
+    </button>
+    <button @click="navigateTo('quiz_list')" class="flex flex-col items-center gap-1 p-2 rounded-xl transition w-20" :class="view === 'quiz_list' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'">
+        <i data-lucide="list-checks" class="w-6 h-6" :class="view === 'quiz_list' ? 'fill-current' : ''"></i>
+        <span class="text-[10px] font-bold">مسابقات</span>
+    </button>
+    <button @click="navigateTo('profile_view')" class="flex flex-col items-center gap-1 p-2 rounded-xl transition w-20 relative" :class="view === 'profile_view' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-600'">
+        <div x-show="unreadCount > 0" class="absolute top-1 right-3 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></div>
+        <i data-lucide="user" class="w-6 h-6" :class="view === 'profile_view' ? 'fill-current' : ''"></i>
+        <span class="text-[10px] font-bold">پروفایل</span>
+    </button>
+</div>
