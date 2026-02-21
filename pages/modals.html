@@ -1,0 +1,69 @@
+<div x-show="modal.show" class="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in">
+    <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 text-center shadow-2xl scale-100">
+        <!-- Standard Modals -->
+        <div x-show="!['lottery_result', 'channel_check'].includes(modal.type)">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <span x-show="modal.type === 'start'">🚀</span>
+                <span x-show="modal.type === 'exit' || modal.type === 'delete_quiz'">⚠️</span>
+                <span x-show="modal.type === 'submit'">📝</span>
+            </div>
+            <h3 class="font-bold text-lg mb-2" x-text="modal.title"></h3>
+            <div x-show="modal.type === 'start'" class="text-xs text-slate-500 bg-slate-50 p-4 rounded-2xl mb-6 text-right space-y-2">
+                <p>• زمان: <span class="font-bold text-slate-800" x-text="modal.data?.noTimer ? 'نامحدود' : modal.data?.timeLimit + ' دقیقه'"></span></p>
+                <p>• سوالات: <span class="font-bold text-slate-800" x-text="modal.data?.questions?.length || 0"></span></p>
+            </div>
+            <p x-show="modal.type !== 'start'" class="text-xs text-slate-400 mb-6" x-text="modal.desc"></p>
+            <div class="flex gap-3">
+                <button @click="modal.show = false" class="flex-1 py-3 text-slate-400 font-bold text-sm hover:bg-slate-50 rounded-xl transition">انصراف</button>
+                <button @click="confirmAction()" class="flex-1 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-200 hover:bg-blue-700 transition">تایید</button>
+            </div>
+        </div>
+
+        <!-- Channel Check Modal -->
+        <div x-show="modal.type === 'channel_check'">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner animate-bounce">
+                📢
+            </div>
+            <h3 class="font-bold text-lg mb-2 text-slate-800">عضویت در کانال</h3>
+            <p class="text-xs text-slate-500 mb-6 leading-relaxed" x-text="modal.data?.text || 'برای ادامه لطفا در کانال ما عضو شوید'"></p>
+            
+            <div class="space-y-3">
+                <button @click="openChannelLink(modal.data?.link)" class="w-full bg-blue-100 text-blue-700 py-3 rounded-xl font-bold text-sm hover:bg-blue-200 transition flex items-center justify-center gap-2">
+                     مشاهده کانال <i data-lucide="external-link" class="w-4 h-4"></i>
+                </button>
+                
+                <button @click="confirmAction()" 
+                        :disabled="!modal.data?.linkClicked"
+                        class="w-full py-3 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2"
+                        :class="modal.data?.linkClicked ? 'bg-blue-600 text-white shadow-lg shadow-blue-200 hover:bg-blue-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'">
+                     <span>ادامه</span>
+                     <i x-show="!modal.data?.linkClicked" data-lucide="lock" class="w-4 h-4"></i>
+                     <i x-show="modal.data?.linkClicked" data-lucide="check" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Lottery Result Modal -->
+        <div x-show="modal.type === 'lottery_result'" class="pop-in relative">
+            <button @click="modal.show = false" class="absolute top-0 right-0 p-2 text-slate-300 hover:text-slate-500"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <!-- Winner -->
+            <div x-show="modal.data?.isWinner">
+                <div class="w-24 h-24 bg-yellow-100 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(234,179,8,0.3)]">
+                     <i data-lucide="trophy" class="w-12 h-12"></i>
+                </div>
+                <h3 class="font-black text-xl text-slate-800 mb-2">تبریک! برنده شدید</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">شما در قرعه‌کشی این مسابقه برنده شده‌اید. جهت دریافت جایزه با پشتیبانی هماهنگ کنید.</p>
+                <button @click="modal.show = false" class="w-full bg-yellow-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-yellow-200">بسیار عالی</button>
+            </div>
+            <!-- Loser -->
+            <div x-show="!modal.data?.isWinner">
+                <div class="w-20 h-20 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                     <i data-lucide="frown" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-lg text-slate-700 mb-2">متاسفانه برنده نشدید</h3>
+                <p class="text-xs text-slate-400 mb-6">در این قرعه‌کشی شانس با شما یار نبود. امیدواریم در مسابقات بعدی برنده باشید.</p>
+                <button @click="modal.show = false" class="w-full bg-slate-100 text-slate-500 py-3 rounded-xl font-bold text-sm hover:bg-slate-200">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
